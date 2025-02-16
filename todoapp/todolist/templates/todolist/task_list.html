@@ -3,15 +3,25 @@
 {% block title %} Task List {% endblock title %}
 
 {% block content %}
-<section class="max-w-3xl mx-auto py-10">
+
+<section class="max-w-6xl mx-auto py-10">
     <h1 class="text-3xl font-bold text-center text-gray-900 mb-6">Список задач</h1>
 
-    <div class="bg-white shadow-lg rounded-lg p-6">
-        {% if object_list %}
+    <!-- Невыполненные задачи -->
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Невыполненные задачи</h2>
+        {% if uncompleted_tasks %}
             <ul class="space-y-4">
-                {% for i in object_list %}
-                    <li class="flex justify-between items-center p-4 bg-gray-100 rounded-lg shadow">
-                        <a href="{% url 'AboutTask' i.id %}"><span class="text-lg text-gray-800">{{ i }}</span></a>
+                {% for i in uncompleted_tasks %}
+                <!-- Color changes now -->
+                    <li class="flex justify-between items-center p-4 rounded-lg shadow bg-gray-100
+            {% if i.priority == 1 %} bg-red-200{% endif %}
+            {% if i.priority == 2 %} bg-yellow-200{% endif %}
+            {% if i.priority == 3 %} bg-blue-200{% endif %}">
+
+                        <a href="{% url 'AboutTask' i.id %}">
+                            <span class="text-lg text-gray-800">{{forloop.counter}}. {{ i }} | Priority: {{ i.priority }}</span>
+                        </a>
                         <div class="space-x-2">
                             <a href="{% url 'TaskUpdate' i.id %}"
                                class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
@@ -26,7 +36,35 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-gray-500 text-center">Нет задач.</p>
+            <p class="text-gray-500 text-center">Нет невыполненных задач.</p>
+        {% endif %}
+    </div>
+
+    <!-- Выполненные задачи -->
+    <div class="bg-white shadow-lg rounded-lg p-5">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Выполненные задачи</h2>
+        {% if completed_tasks %}
+            <ul class="space-y-4">
+                {% for i in completed_tasks %}
+                    <li class="flex justify-between items-center p-4 bg-gray-200 rounded-lg shadow">
+                        <a href="{% url 'AboutTask' i.id %}">
+                            <span class="text-lg text-gray-600 line-through">{{forloop.counter}}. {{ i }}</span>
+                        </a>
+                        <div class="space-x-2">
+                            <a href="{% url 'TaskUpdate' i.id %}"
+                               class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                                ✏️ Изменить
+                            </a>
+                            <a href="{% url 'TaskDelete' i.id %}"
+                               class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800">
+                                🗑 Удалить
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-500 text-center">Нет выполненных задач.</p>
         {% endif %}
     </div>
 
@@ -38,4 +76,5 @@
         </a>
     </div>
 </section>
+
 {% endblock content %}
