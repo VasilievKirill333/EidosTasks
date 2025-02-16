@@ -1,0 +1,40 @@
+{% extends 'todolist/base.html' %}
+
+{% block title %} Create Task {% endblock title %}
+
+{% block content %}
+<section class="max-w-lg mx-auto py-10">
+    <!-- Кнопка возврата -->
+    <div class="mb-6">
+        <a href="{% url 'TaskList' %}" class="text-blue-500 hover:underline">← Вернуться к списку задач</a>
+    </div>
+
+    <!-- Заголовок -->
+    <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Создать новую задачу</h1>
+
+    <!-- Форма -->
+    <div class="bg-white shadow-lg rounded-lg p-6 max-w-md mx-auto">
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Django-форма, обернутая в стили -->
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-gray-700 font-medium mb-2">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <!-- Кнопка отправки -->
+        <button type="submit"
+            class="w-full bg-indigo-500 text-white py-3 rounded-lg shadow-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+            ✅ Добавить задачу
+        </button>
+    </form>
+</div>
+
+</section>
+{% endblock content %}

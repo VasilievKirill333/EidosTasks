@@ -1,0 +1,33 @@
+{% extends 'todolist/base.html' %}
+
+{% block title %} Delete Task {% endblock title %}
+
+{% block content %}
+<section class="max-w-md mx-auto py-10">
+    <!-- Кнопка возврата -->
+    <div class="mb-6">
+        <a href="{% url 'TaskList' %}" class="text-blue-500 hover:underline">← Вернуться к списку задач</a>
+    </div>
+
+    <!-- Карточка подтверждения -->
+    <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">Вы уверены, что хотите удалить эту задачу?</h1>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Кнопки -->
+            <div class="flex justify-center space-x-4">
+                <a href="{% url 'TaskList' %}"
+                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                    ❌ Отмена
+                </a>
+                <button type="submit"
+                    class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
+                    ✅ Удалить
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}

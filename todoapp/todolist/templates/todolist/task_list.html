@@ -1,0 +1,41 @@
+{% extends 'todolist/base.html' %}
+
+{% block title %} Task List {% endblock title %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto py-10">
+    <h1 class="text-3xl font-bold text-center text-gray-900 mb-6">Список задач</h1>
+
+    <div class="bg-white shadow-lg rounded-lg p-6">
+        {% if object_list %}
+            <ul class="space-y-4">
+                {% for i in object_list %}
+                    <li class="flex justify-between items-center p-4 bg-gray-100 rounded-lg shadow">
+                        <a href="{% url 'AboutTask' i.id %}"><span class="text-lg text-gray-800">{{ i }}</span></a>
+                        <div class="space-x-2">
+                            <a href="{% url 'TaskUpdate' i.id %}"
+                               class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                                ✏️ Изменить
+                            </a>
+                            <a href="{% url 'TaskDelete' i.id %}"
+                               class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800">
+                                🗑 Удалить
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-500 text-center">Нет задач.</p>
+        {% endif %}
+    </div>
+
+    <!-- Кнопка для добавления задачи -->
+    <div class="text-center mt-6">
+        <a href="{% url 'TaskCreate' %}"
+           class="px-4 py-2 bg-indigo-500 text-white rounded-lg shadow hover:bg-indigo-600 transition">
+            ➕ Добавить задачу
+        </a>
+    </div>
+</section>
+{% endblock content %}
