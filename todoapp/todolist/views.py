@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.views import LoginView, LogoutView
-from .models import Task
+from .models import Task, Project
 from .forms import TaskCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -46,6 +46,7 @@ class AboutTask(LoginRequiredMixin, DetailView):
     template_name = "todolist/about_task.html"
     login_url = "/login"
 
+
 def complete(request, pk):
     current = Task.objects.get(id=pk)
     current.is_completed = True
@@ -57,3 +58,25 @@ def incomplete(request, pk):
     current.is_completed = False
     current.save()
     return redirect("AboutTask", pk=pk)
+
+
+class ProjectListView(ListView):
+    template_name = 'todolist/project_list.html'
+    model = Project
+    context_object_name = 'object_list'
+
+
+class ProjectDetail(DetailView):
+    template_name = 'todolist/project_detail.html'
+    model = Project
+    context_object_name = 'project'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ss = Project.objects.get(id=self.kwargs['pk'])
+        context['project_tasks_list'] = Task.objects.filter(project=ss)
+        return context
+
+
+
+

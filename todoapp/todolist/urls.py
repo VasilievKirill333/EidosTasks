@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import TaskListView, TaskCreate, TaskUpdate, TaskDelete, Login, AboutTask, complete, incomplete
+from .views import TaskListView, TaskCreate, TaskUpdate, TaskDelete, Login, AboutTask, complete, incomplete, ProjectListView, ProjectDetail
 from django.contrib.auth.views import LoginView, LogoutView
 urlpatterns = [
     path('', TaskListView.as_view(), name="TaskList"),
@@ -10,5 +10,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name="Logout"),
     path('abouttask/<int:pk>/', AboutTask.as_view(), name="AboutTask"),
     path('abouttask/<int:pk>/complete/',complete, name="complete" ),
-    path('abouttask/<int:pk>/incomplete/', incomplete, name="incomplete")
+    path('abouttask/<int:pk>/incomplete/', incomplete, name="incomplete"),
+    path('project/', ProjectListView.as_view(), name='project_list'),
+    path('project/<int:pk>', ProjectDetail.as_view(), name='project_detail')
 ]

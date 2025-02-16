@@ -20,7 +20,7 @@
     <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
       <a class="mr-5 hover:text-gray-900" href="{% url 'TaskCreate'%}">Create Task</a>
         <a class="mr-5 hover:text-gray-900" href="{% url 'TaskList'%}">Task List</a>
-        <a class="mr-5 hover:text-gray-900" href="{% url 'ProjectList'%}">Projects</a>
+        <a class="mr-5 hover:text-gray-900" href="{% url 'project_list' %}">Projects</a>
     </nav>
       {% if request.user.is_authenticated %}
           <form method="POST" action="{% url 'Logout' %}">
