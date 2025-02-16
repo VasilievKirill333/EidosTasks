@@ -1,0 +1,25 @@
+{% extends 'todolist/base.html' %}
+
+{% block content %} <div class="bg-white shadow-lg rounded-lg p-6">
+        {% if project_tasks_list %}
+            <ul class="space-y-4">
+                {% for object in project_tasks_list %}
+                    <li class="flex justify-between items-center p-4 bg-gray-100 rounded-lg shadow">
+                        <a href="{% url 'AboutTask' object.id %}"><span class="text-lg text-gray-800">{{ forloop.counter }}. {{ object.title }}</span></a>
+                        <div class="space-x-2">
+                            <a href="{% url 'TaskUpdate' object.id %}"
+                               class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                                ✏️ Изменить
+                            </a>
+                            <a href="{% url 'TaskDelete' object.id %}"
+                               class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800">
+                                🗑 Удалить
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-500 text-center">Нет заданий.</p>
+        {% endif %}
+    </div> {% endblock content %}
