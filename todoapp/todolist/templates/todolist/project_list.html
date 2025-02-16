@@ -9,14 +9,19 @@
     <div class="bg-white shadow-lg rounded-lg p-6">
         {% if object_list %}
             <ul class="space-y-4">
-                {% for object in object_list %}
-                    <li class="flex justify-between items-center p-4 bg-gray-100 rounded-lg shadow">
-                        <a href="{% url 'project_detail' object.id %}"><span class="text-lg text-gray-800">{{ forloop.counter }}. {{ object.title }}</span></a>
-                        <div class="space-x-2">
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+    {% for object in object_list %}
+        <li class="flex justify-between items-center p-4 rounded-lg shadow
+            {% if object.priority == 1 %} bg-red-200{% endif %}
+            {% if object.priority == 2 %} bg-yellow-200{% endif %}
+            {% if object.priority == 3 %} bg-blue-200{% endif %}">
+
+            <a href="{% url 'AboutTask' object.id %}">
+                <span class="text-lg text-gray-800">{{ object.title }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
         {% else %}
             <p class="text-gray-500 text-center">Нет проектов.</p>
         {% endif %}

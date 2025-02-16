@@ -11,12 +11,18 @@ class Project(models.Model):
 
 
 class Task(models.Model):
+    Choices = [(1, 'high'),
+               (2, 'medium'),
+               (3, 'low'),
+               (4, 'nop')]
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add = True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
     is_completed = models.BooleanField(default=False, verbose_name="Is Completed")
+    priority = models.SmallIntegerField(choices=Choices, default=4)
 
     def __str__(self):
         return self.title
