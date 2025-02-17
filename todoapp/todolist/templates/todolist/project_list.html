@@ -15,7 +15,7 @@
             {% if object.priority == 2 %} bg-yellow-200{% endif %}
             {% if object.priority == 3 %} bg-blue-200{% endif %}">
 
-            <a href="{% url 'AboutTask' object.id %}">
+            <a href="{% url 'project_detail' object.id %}">
                 <span class="text-lg text-gray-800">{{ object.title }}</span>
             </a>
         </li>
@@ -29,7 +29,7 @@
 
     <!-- Кнопка для добавления задачи -->
     <div class="text-center mt-6">
-        <a href="{% url 'TaskCreate' %}"
+        <a href="{% url 'project_create' %}"
            class="px-4 py-2 bg-indigo-500 text-white rounded-lg shadow hover:bg-indigo-600 transition">
             ➕ Создать новый проект
         </a>
