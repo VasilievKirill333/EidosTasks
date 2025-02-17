@@ -6,6 +6,7 @@ from .forms import TaskCreationForm, ProjectCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.utils.timezone import now
 
 # Create your views here.
 class TaskListView(LoginRequiredMixin, ListView):
@@ -20,7 +21,8 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['uncompleted_tasks'] = Task.objects.filter(Q(user=self.request.user) & Q(is_completed = False))
+        context['uncompleted_tasks'] = Task.objects.filter(Q(user=self.request.user) & \
+                                                           Q(is_completed = False))
         context['completed_tasks'] = Task.objects.filter(Q(user=self.request.user) & Q(is_completed = True))
         return context
 
@@ -68,7 +70,7 @@ def complete(request, pk):
     current = Task.objects.get(id=pk)
     current.is_completed = True
     current.save()
-    return redirect("AboutTask", pk=pk)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 def incomplete(request, pk):
     current = Task.objects.get(id=pk)
