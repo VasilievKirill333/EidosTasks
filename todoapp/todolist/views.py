@@ -1,3 +1,5 @@
+from pydoc import describe
+
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.views import LoginView, LogoutView
@@ -7,6 +9,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.utils.timezone import now
+
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import TaskSerializer, ProjectCustomSerializer
 
 # Create your views here.
 class TaskListView(LoginRequiredMixin, ListView):
@@ -102,6 +109,32 @@ class ProjectCreateView(CreateView):
     form_class = ProjectCreationForm
     template_name = 'todolist/project_create.html'
     success_url = '/project/'
+
+#---------API'S-------------
+class TaskAPIView(APIView):
+    def get(self, request):
+        lst = Task.objects.all()
+        print(lst.values())
+        return Response({'title': lst.values()})
+
+    def post(self, request, *args, **kwargs):
+        return Response({'message': 'Nope, no John here, call me Gabriel'})
+
+class ProjectAPIView(APIView):
+    def get(self, request):
+        list_of_prjcts = Project.objects.all()
+        return Response({"projects": ProjectCustomSerializer(list_of_prjcts, many=True).data})
+
+    def post(self, request):
+        serialuzer = ProjectCustomSerializer(data=request.data)
+        serialuzer.is_valid(raise_exception=True)
+        post_new = Project.objects.create(
+            title = request.data['title'],
+            description = request.data['description']
+        )
+
+        return Response({'created_post': ProjectCustomSerializer(post_new).data})
+
 
 
 

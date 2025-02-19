@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
+    cr_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.title}'
