@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
+from django.core import validators
 
 # Create your models here.
 class Project(models.Model):
@@ -17,8 +19,8 @@ class Task(models.Model):
                (3, 'low'),
                (4, 'nop')]
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
-    title = models.CharField(max_length=200)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True, unique=True)
+    title = models.CharField(max_length=200, validators=[validators.MinLengthValidator(5, message='Your title is too short')])
     date = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
@@ -33,3 +35,4 @@ class Task(models.Model):
         verbose_name = "Task"
         verbose_name_plural = "Tasks"
 
+        constraints = (models.CheckConstraint(condition=Q(priority__lte=4), name='priority_condition'),)
