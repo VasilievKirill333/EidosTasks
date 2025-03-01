@@ -13,30 +13,47 @@
     {% if uncompleted_tasks %}
         <ul class="space-y-4">
             {% for i in uncompleted_tasks %}
-                <li class="flex justify-between items-center p-4 rounded-lg shadow bg-gray-100
-                    {% if i.priority == 1 %} bg-red-200{% endif %}
-                    {% if i.priority == 2 %} bg-yellow-200{% endif %}
-                    {% if i.priority == 3 %} bg-blue-200{% endif %}">
+    <li class="flex justify-between items-center p-4 rounded-lg shadow bg-gray-100
+        {% if i.priority == 1 %} bg-red-200{% endif %}
+        {% if i.priority == 2 %} bg-yellow-200{% endif %}
+        {% if i.priority == 3 %} bg-blue-200{% endif %}">
 
-                    <a href="{% url 'AboutTask' i.id %}">
-                        <span class="text-lg text-gray-800">{{ forloop.counter }}. {{ i }} | Priority: {{ i.priority }}</span>
-                    </a>
-                    <div class="space-x-2">
-                        <a href="{% url 'TaskUpdate' i.id %}"
-                           class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
-                            ✏️ Изменить
-                        </a>
-                        <a href="{% url 'TaskDelete' i.id %}"
-                           class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800">
-                            🗑 Удалить
-                        </a>
-                        <a href="{% url 'complete' i.id %}"
-                           class="px-3 py-1 text-sm font-medium text-green-600 hover:text-green-800">
-                            ✅ Выполнить
-                        </a>
-                    </div>
-                </li>
-            {% endfor %}
+        <a href="{% url 'AboutTask' i.id %}">  <!-- Теперь i.id существует -->
+            <span class="text-lg text-gray-800">{{ forloop.counter }}. {{ i.title }} | Priority: {{ i.priority }}</span>
+        </a>
+
+        <div class="text-sm text-gray-600">
+           {% if i.remaining_time and i.remaining_time.days is not None %}
+
+    {% if i.remaining_time.days > 0 %}
+        ⏳ {{ i.remaining_time.days }} дн. {{ i.remaining_time.hours }} ч.
+    {% elif i.remaining_time.hours > 0 %}
+        ⏳ {{ i.remaining_time.hours }} ч. {{ i.remaining_time.minutes }} мин.
+    {% elif i.remaining_time.minutes > 0 %}
+        ⏳ {{ i.remaining_time.minutes }} мин.
+    {% else %}
+        ⏳ {{ i.remaining_time.seconds }} сек.
+    {% endif %}
+{% else %}
+    ⏳ <a href="{% url 'set_deadline' i.id %}">Настроить дедлайн</a>
+{% endif %}
+
+        </div>
+
+        <div class="space-x-2">
+            <a href="{% url 'TaskUpdate' i.id %}" class="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800">
+                ✏️ Изменить
+            </a>
+            <a href="{% url 'TaskDelete' i.id %}" class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800">
+                🗑 Удалить
+            </a>
+            <a href="{% url 'complete' i.id %}" class="px-3 py-1 text-sm font-medium text-green-600 hover:text-green-800">
+                ✅ Выполнить
+            </a>
+        </div>
+    </li>
+{% endfor %}
+
         </ul>
     {% else %}
         <p class="text-gray-500 text-center">Нет невыполненных задач.</p>
