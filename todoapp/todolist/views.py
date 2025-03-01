@@ -110,30 +110,6 @@ class ProjectCreateView(CreateView):
     template_name = 'todolist/project_create.html'
     success_url = '/project/'
 
-#---------API'S-------------
-class TaskAPIView(APIView):
-    def get(self, request):
-        lst = Task.objects.all()
-        print(lst.values())
-        return Response({'title': lst.values()})
-
-    def post(self, request, *args, **kwargs):
-        return Response({'message': 'Nope, no John here, call me Gabriel'})
-
-class ProjectAPIView(APIView):
-    def get(self, request):
-        list_of_prjcts = Project.objects.all()
-        return Response({"projects": ProjectCustomSerializer(list_of_prjcts, many=True).data})
-
-    def post(self, request):
-        serialuzer = ProjectCustomSerializer(data=request.data)
-        serialuzer.is_valid(raise_exception=True)
-        post_new = Project.objects.create(
-            title = request.data['title'],
-            description = request.data['description']
-        )
-
-        return Response({'created_post': ProjectCustomSerializer(post_new).data})
 
 
 

@@ -16,11 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from todolist.views import TaskAPIView, ProjectAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/taskapi/', TaskAPIView.as_view()),
-    path('api/v1/projectapi/', ProjectAPIView.as_view()),
     path('', include("todolist.urls"))
 ]
