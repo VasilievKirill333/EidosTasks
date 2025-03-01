@@ -1,5 +1,7 @@
 from django import forms
 from .models import Task, Project
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class TaskCreationForm(forms.ModelForm):
     class Meta:
@@ -12,6 +14,11 @@ class TaskCreationForm(forms.ModelForm):
             "is_completed": forms.CheckboxInput(attrs={"class": "h-5 w-5 border-gray-300 text-indigo-500 focus:ring-indigo-500"}),
             'project': forms.Select(attrs={'class': 'block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500'})
         }
+
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']
 
 
 class ProjectCreationForm(forms.ModelForm):
