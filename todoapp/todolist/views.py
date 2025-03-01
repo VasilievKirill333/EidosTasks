@@ -29,9 +29,19 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['uncompleted_tasks'] = Task.objects.filter(Q(user=self.request.user) & \
-                                                           Q(is_completed = False))
-        context['completed_tasks'] = Task.objects.filter(Q(user=self.request.user) & Q(is_completed = True))
+        tasks = Task.objects.filter(user=self.request.user)
+
+        # Добавляем `remaining_time` как атрибут к объекту Task
+        for task in tasks:
+            task.remaining_time = task.time_remaining_dict()  # Добавляем атрибут времени
+
+        context['uncompleted_tasks'] = [
+            {"id": task.id, "title": task.title, "priority": task.priority,
+             "remaining_time": task.time_remaining_dict()}
+            for task in tasks if not task.is_completed
+        ]
+
+        context['completed_tasks'] = tasks.filter(is_completed=True)
         return context
 
 
@@ -123,6 +133,15 @@ def register(request):
         form = RegisterForm()
 
     return render(request, 'todolist/register.html', {'form': form})
+
+def set_deadline(request, pk):
+    if request.method == 'POST':
+        task = Task.objects.get(id=pk)
+        task.deadline = request.POST.get('deadline')
+        task.save()
+        return redirect('TaskList')
+    else:
+        return render(request, 'todolist/set_deadline.html')
 
 
 
