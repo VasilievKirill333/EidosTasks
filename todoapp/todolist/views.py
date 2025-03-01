@@ -1,3 +1,5 @@
+from pydoc import describe
+
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.views import LoginView, LogoutView
@@ -7,6 +9,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.utils.timezone import now
+
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import TaskSerializer, ProjectCustomSerializer
 
 # Create your views here.
 class TaskListView(LoginRequiredMixin, ListView):
@@ -102,6 +109,8 @@ class ProjectCreateView(CreateView):
     form_class = ProjectCreationForm
     template_name = 'todolist/project_create.html'
     success_url = '/project/'
+
+
 
 
 
